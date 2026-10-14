@@ -1,0 +1,59 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+asyncio_default_test_loop_scope = "function"
+
+[tool.coverage.run]
+branch = true
+source = ["bot_runtime", "core", "modules", "services", "repositories", "handlers", "jobs", "ui"]
+omit = ["*/__pycache__/*", "tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+exclude = [".venv*", "venv", "quality-artifacts", "webapp/assets"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# Feature fragments receive their shared and cross-feature namespace at runtime
+# in bot.py. Ruff cannot infer globals().update(...), so F821 is not meaningful
+# for these exact modules. shared.py and every non-fragment module remain fully
+# checked; adding a new fragment requires an explicit reviewed entry here.
+"bot_runtime/account_support.py" = ["F821"]
+"bot_runtime/admin_operations.py" = ["F821"]
+"bot_runtime/analytics_governance.py" = ["F821"]
+"bot_runtime/commerce_calculator.py" = ["F821"]
+"bot_runtime/crm_content.py" = ["F821"]
+"bot_runtime/growth_campaigns.py" = ["F821"]
+"bot_runtime/market_data.py" = ["F821"]
+"bot_runtime/navigation.py" = ["F821"]
+"bot_runtime/operations_governance.py" = ["F821"]
+"bot_runtime/platform_expansion.py" = ["F821"]
+"bot_runtime/runtime_jobs.py" = ["F821"]
+"bot_runtime/signals_portfolio.py" = ["F821"]
+"bot_runtime/system_center.py" = ["F821"]
+"bot_runtime/user_today.py" = ["F821"]
+"bot_runtime/experience.py" = ["F821"]
+"bot_runtime/creation.py" = ["F821"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+check_untyped_defs = true
+exclude = ["\\.venv.*", "venv", "quality-artifacts", "webapp/assets"]
+
+[tool.bandit]
+exclude_dirs = ["tests", "quality-artifacts"]
+skips = ["B101"]

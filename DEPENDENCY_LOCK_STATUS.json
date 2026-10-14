@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "python_target": "3.12",
+  "python_runtime": "3.12.14",
+  "complete_transitive_lock": true,
+  "hashes_required": true,
+  "generated_by": "pip-tools==7.6.1",
+  "attested_at": "2026-10-08T12:57:26.587247+00:00",
+  "production_lock_sha256": "a2828f1c7d539dd50c13c434c8890fa2aeec187a8e9c4d5bb521b5a3b2233df4",
+  "development_lock_sha256": "9f064ec2ff35337bb95932c929d92f252464e700fd80c7582941d02e984d8eb2"
+}

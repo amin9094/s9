@@ -1,0 +1,8 @@
+# Deterministic Railway build context.
+# The image is reconstructed only from the signed runtime bundle. Keeping the
+# rest of a possibly mixed GitHub tree outside BuildKit prevents stale source,
+# stale tests and local data from affecting the image.
+**
+!restore_runtime.py
+!sentinel_runtime.zip
+!sentinel_runtime.zip.sha256

@@ -1,0 +1,68 @@
+# Market adapters implemented in the source; NO private API keys are included.
+# Keep your current server-side secrets in the original Variables file.
+
+# Chart library, vendored in the Mini App; no TradingView account/API key:
+CHART_LIBRARY=KLineChart_10.0.3
+
+# Public crypto ranking (optional demo key; quotas still apply):
+COINGECKO_MARKETS_ENDPOINT=https://api.coingecko.com/api/v3/coins/markets
+COINGECKO_DEMO_API_KEY=
+
+# Public native spot candles / instrument metadata / native BBO:
+KRAKEN_OHLC_ENDPOINT=https://api.kraken.com/0/public/OHLC
+KRAKEN_PAIRS_ENDPOINT=https://api.kraken.com/0/public/AssetPairs
+KRAKEN_QUOTES_WEBSOCKET=wss://ws.kraken.com/v2
+# Live owner: public v2 book, depth 10, Decimal decoder and CRC32 every message.
+# No native sequence exists here; counters are local receive ordinals only.
+# Reconnect/checksum failure blocks old tracking for admin review.
+# Provider+symbol ownership prevents mixing Kraken and OKX evidence.
+BINANCE_KLINES_ENDPOINT=https://api.binance.com/api/v3/klines
+BYBIT_KLINES_ENDPOINT=https://api.bybit.com/v5/market/kline
+OKX_INSTRUMENTS_ENDPOINT=https://www.okx.com/api/v5/public/instruments
+OKX_KLINES_ENDPOINT=https://www.okx.com/api/v5/market/history-candles
+OKX_LATEST_KLINES_ENDPOINT=https://www.okx.com/api/v5/market/candles
+OKX_QUOTES_WEBSOCKET=wss://ws.okx.com/ws/v5/public
+# The live owner uses public incremental channel "books" with seqId/prevSeqId.
+# Native cadence: 100ms. It does not claim every exchange trade or a broker fill.
+# Full-zone promotion also requires the same native candle's wick coverage.
+OKX_ORDERED_TRADE_HISTORY_ENDPOINT=https://www.okx.com/api/v5/market/history-trades
+# Native ordered trades are reconciled to the departure candle's OHLC/base
+# volume before OB departure ordering can be used. Incomplete history is review.
+# These public read endpoints do not require exchange trading keys.
+# Access/geographic limits and supported products are checked by adapters.
+
+# Existing authenticated FX/metals candles adapter:
+TWELVE_DATA_ENDPOINT=https://api.twelvedata.com/time_series
+# Required variable name: TWELVE_DATA_API_KEY. Preserve the existing value.
+# A candle endpoint does not supply authenticated matching Bid/Ask or order flow.
+
+# Public keyless FX/CFD display quotes, with explicit quality limitations:
+FXCM_PUBLIC_QUOTES_ENDPOINT=https://rates.fxcm.com/RatesXML
+# Native full UTC timestamp, native price grid and current CFD candle history
+# remain unverified. This display endpoint cannot certify a signal Entry.
+
+# Admin research API (same authenticated Mini App session and CSRF on writes):
+# POST /api/v1/market/analyze  {symbol,timeframe,profile_id?}
+# GET  /api/v1/market/reviews
+# GET  /api/v1/market/research-profiles
+# POST /api/v1/market/research-profiles/select  {engine,profile_id}
+# POST /api/v1/market/setups/{setup_id}/exit
+# POST /api/v1/market/setups/{setup_id}/cancel  {version,reason,request_id}
+# POST /api/v1/market/setups/{setup_id}/approve
+#      {version,event_id?,audience:miniapp|telegram_public|telegram_private}
+# Each event and audience needs its own authorized approval. Public targets use
+# only existing PUBLIC_CHANNEL_ID / PRIVATE_CHANNEL_ID; no caller chat override.
+# Initial public signals must still precede first touch. Unknown network send
+# results are not automatically retried. The worker's live owner requires one
+# configured polling replica and starts/stops with the existing application.
+# Profile choice is saved separately for each independent engine and applies
+# only to future research scans; it does not rewrite approved historical plans.
+
+# Cash index chart source, NOT broker CFD quotes:
+YAHOO_CHART_ENDPOINT=https://query1.finance.yahoo.com/v8/finance/chart/
+MARKET_INDEX_PROVIDER=yahoo
+MARKET_CHART_POLL_SECONDS=60
+
+# Names ending ENDPOINT above document the code's adapters. They are not an
+# operator-selectable URL override and do not activate an unsupported market.
+# No new broker account, subscription, or private credential was created.

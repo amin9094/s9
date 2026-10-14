@@ -1,0 +1,100 @@
+{
+  "version": "9.0.0-candidate.14",
+  "release_channel": "candidate",
+  "created_at": "2026-10-14T15:39:33.233269+00:00",
+  "commit_sha": "unavailable",
+  "docker_image_digest": null,
+  "quality_proof_source_sha256": "5d44cdb46da168f46d239cc888b5154b8a9b58aebc2288f6d4d431464f5493b0",
+  "runtime_sha256": "acfb5046a03ff9ddc53596def96ebeafa325795e971a4f4130133457d2098ba6",
+  "automated_tests_discovered": 1886,
+  "automated_tests_executed": 1886,
+  "telegram_handlers": 561,
+  "line_coverage_percent": 42,
+  "critical_path_coverage_percent": 78,
+  "validation": {
+    "webapp_assets": true,
+    "runtime_test_bundle": true,
+    "compile": true,
+    "pytest_collect": true,
+    "pytest": true,
+    "application_build": true,
+    "ruff": true,
+    "bandit": true,
+    "dependency_lock": true,
+    "dependency_boundaries": true,
+    "circular_imports": true,
+    "security_scan": true,
+    "standalone_smokes": true,
+    "performance_budgets": true,
+    "offline_smoke": true,
+    "load_smoke": true,
+    "javascript": true,
+    "coverage_run": true,
+    "coverage": true,
+    "critical_coverage": true,
+    "coverage_data": true
+  },
+  "deferred_validation": {
+    "ruff_full_profile": {
+      "status": "candidate_scope",
+      "reason": "full style/import cleanup is enforced for production releases"
+    },
+    "mypy_full_profile": {
+      "status": "candidate_scope",
+      "reason": "focused Mypy enforcement is reserved for production releases"
+    },
+    "docker_build_no_cache": {
+      "status": "not_run",
+      "reason": "Docker is unavailable or the post-build attestation has not been recorded"
+    },
+    "docker_image_digest": {
+      "status": "not_recorded",
+      "reason": "image digest is assigned after image build"
+    },
+    "external_production_acceptance": {
+      "status": "not_attested",
+      "reason": "production acceptance is not a passed schema-2 report; production acceptance does not match this release source; production acceptance does not match this Docker image; production acceptance requires an HTTPS deployment; production acceptance is expired or has invalid timestamps; production acceptance checks are missing or invalid"
+    },
+    "mt5_ex5_compile_and_demo": {
+      "status": "not_attested",
+      "reason": "compiled MT5 connector is missing"
+    }
+  },
+  "dependency_lock": {
+    "schema_version": 2,
+    "python_target": "3.12",
+    "python_runtime": "3.12.14",
+    "complete_transitive_lock": true,
+    "hashes_required": true,
+    "generated_by": "pip-tools==7.6.1",
+    "attested_at": "2026-10-08T12:57:26.587247+00:00",
+    "production_lock_sha256": "a2828f1c7d539dd50c13c434c8890fa2aeec187a8e9c4d5bb521b5a3b2233df4",
+    "development_lock_sha256": "9f064ec2ff35337bb95932c929d92f252464e700fd80c7582941d02e984d8eb2"
+  },
+  "security_controls": {
+    "docker_quality_dependency": true,
+    "secure_non_root_entrypoint": true,
+    "strict_production_secret_validation": true,
+    "session_key_rotation": true,
+    "backup_key_rotation": true,
+    "private_encrypted_receipt_storage": true,
+    "receipt_upload_quota_and_retention": true,
+    "postgres_advisory_migration_lock": true,
+    "postgres_connection_pool": true,
+    "redis_connection_limits": true,
+    "bounded_blocking_io": true,
+    "sse_connection_limits": true,
+    "maintenance_mutation_gate": true,
+    "csrf_and_origin_validation": true
+  },
+  "production_acceptance": {
+    "required_line_coverage_percent": 40,
+    "required_critical_path_coverage_percent": 85,
+    "requires_no_deferred_validation": true,
+    "requires_real_postgres_redis_telegram_staging": true,
+    "requires_live_gemini_generation_test": true,
+    "requires_playwright_telegram_webview_smoke": true,
+    "requires_mt5_ex5_and_demo_attestation": true,
+    "requires_complete_transitive_hash_lock": true
+  }
+}

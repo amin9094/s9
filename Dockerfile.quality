@@ -1,0 +1,46 @@
+# syntax=docker/dockerfile:1.7
+FROM python:3.12-slim-bookworm
+ARG SENTINEL_BUILD_REPAIR=railway-hash-lock-journal-r44
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_DEFAULT_TIMEOUT=180 \
+    TZ=Asia/Tehran \
+    SENTINEL_COVERAGE_GROUP_SIZE=100 \
+    SENTINEL_TEST_TIMEOUT_SECONDS=1200 \
+    SENTINEL_COVERAGE_GROUP_TIMEOUT=1200 \
+    SENTINEL_COVERAGE_WORKER_TIMEOUT=1500 \
+    SENTINEL_QUALITY_FINALIZER_TIMEOUT=1560
+WORKDIR /bootstrap
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs ca-certificates fonts-dejavu-core \
+ && test -s /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf \
+ && test -s /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf \
+ && rm -rf /var/lib/apt/lists/*
+COPY restore_runtime.py sentinel_runtime.zip sentinel_runtime.zip.sha256 ./
+RUN set -eux; \
+    expected="$(awk 'NR==1 {print $1}' sentinel_runtime.zip.sha256)"; \
+    actual="$(sha256sum sentinel_runtime.zip | awk '{print $1}')"; \
+    test -n "$expected"; \
+    test "$actual" = "$expected"; \
+    mkdir -p /app; \
+    python /bootstrap/restore_runtime.py \
+      --bundle /bootstrap/sentinel_runtime.zip \
+      --destination /app \
+      --canonicalize-quality \
+      --profile quality; \
+    cp /bootstrap/restore_runtime.py /bootstrap/sentinel_runtime.zip /bootstrap/sentinel_runtime.zip.sha256 /app/
+WORKDIR /app
+RUN python -m pip install --require-hashes --no-cache-dir --prefer-binary --retries 8 --timeout 180 -r requirements-dev.lock.txt \
+ && python -m pip check \
+ && python -c 'import pytest_asyncio; print("pytest-asyncio=" + pytest_asyncio.__version__)'
+RUN python scripts/quality_gate.py \
+      --release-channel candidate \
+      --full-suite \
+      --candidate-line-threshold 19 \
+      --candidate-critical-threshold 75 \
+ && node scripts/check_miniapp_js.js \
+ && python -m compileall -q main.py bot.py config.py bot_runtime core modules services repositories handlers jobs ui scripts tests \
+ && python scripts/build_release.py --outer /tmp/sentinel-quality-release.zip
+CMD ["python", "scripts/release_gate.py", "--container-quality"]

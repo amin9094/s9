@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "purpose": "Self-contained Railway runtime and in-bundle quality tests",
+  "outer_supplied_files": [
+    "restore_runtime.py",
+    "sentinel_runtime.zip",
+    "sentinel_runtime.zip.sha256"
+  ],
+  "excluded_outer_only_tests": [
+    "tests/test_runtime_restore_bootstrap.py",
+    "tests/test_railway_clean_bundle_build.py"
+  ],
+  "contract": "Every test shipped inside sentinel_runtime.zip must collect and run after the ZIP is extracted without requiring outer archive files. Outer bootstrap tests are executed before packaging from the full source tree."
+}
